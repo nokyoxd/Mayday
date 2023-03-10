@@ -1,15 +1,18 @@
+#include <GL/glew.h>
 #include <GLFW/glfw3.h>
+
+#include <stdio.h>
 
 int main(void)
 {
     GLFWwindow* window;
 
-    /* Initialize the library */
+    /* Initialize GLFW library */
     if (!glfwInit())
         return -1;
 
-    /* Create a windowed mode window and its OpenGL context */
-    window = glfwCreateWindow(640, 480, "Hello World", NULL, NULL);
+    /* Create a window and OpenGL context */
+    window = glfwCreateWindow(640, 480, "Mayday", NULL, NULL);
     if (!window)
     {
         glfwTerminate();
@@ -18,6 +21,12 @@ int main(void)
 
     /* Make the window's context current */
     glfwMakeContextCurrent(window);
+
+    /* Initialize GLEW library */
+    if (glewInit() != GLEW_OK)
+        return -1;
+
+    printf("Status: Using GLEW %s\n", glGetString(GL_VERSION));
 
     /* Loop until the user closes the window */
     while (!glfwWindowShouldClose(window))
@@ -32,6 +41,7 @@ int main(void)
         glfwPollEvents();
     }
 
+    /* Terminate GLFW content */
     glfwTerminate();
 
     return 0;
