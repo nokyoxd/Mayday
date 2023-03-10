@@ -1,1 +1,1 @@
-# -Mayday
+# Mayday
