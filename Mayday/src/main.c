@@ -1,5 +1,9 @@
 #include "include.hpp"
 #include "graphics/shaders.h"
+#include "input/input.h"
+
+static int x = 10;
+static int y = 10;
 
 int main(void)
 {
@@ -10,7 +14,7 @@ int main(void)
         return -1;
 
     /* Create a window and OpenGL context */
-    window = glfwCreateWindow(640, 480, "Mayday", NULL, NULL);
+    window = glfwCreateWindow(1240, 820, "Mayday", NULL, NULL);
     if (!window)
     {
         glfwTerminate();
@@ -27,30 +31,65 @@ int main(void)
     printf("Status: Initialized GLFW (%s)\n", glfwGetVersionString());
     printf("Status: Initialized GLEW (%s)\n", glGetString(GL_VERSION));
 
-    float pos[6] = {
-        -0.5f, -0.5f,
-         0.0f,  0.5f,
-         0.5f, -0.5f
+    /* Position of the element points */
+    float vertices[] = {
+        0.5f, 0.5f, 0.0f,       // top right
+        0.5f, -0.5f, 0.0f,      // bottom right
+        -0.5f, -0.5f, 0.0f,     // bottom left
+        -0.5f, 0.5f, 0.0f,      // top left
+        -0.2f, 0.2f, 0.0f       // bottom left
     };
 
-    unsigned int buffer;
-    glGenBuffers(1, &buffer);
-    glBindBuffer(GL_ARRAY_BUFFER, buffer);
-    glBufferData(GL_ARRAY_BUFFER, 6 * sizeof(float), pos, GL_STATIC_DRAW);
+    unsigned int indices[] = {
+        0, 1, 3,
+        1, 2, 3
+    };
 
+    unsigned int VBO, VAO, EBO;
+    glGenBuffers(1, &VBO);
+    glGenVertexArrays(1, &VAO);
+    glGenBuffers(1, &EBO);
+
+    glBindVertexArray(VAO);
+
+    glBindBuffer(GL_ARRAY_BUFFER, VBO);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
+
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
     glEnableVertexAttribArray(0);
-    glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, sizeof(float) * 2, 0);
 
-    unsigned int shader = CreateShader(vertexShader, fragmentShader);
-    glUseProgram(shader);
+    glBindVertexArray(0);
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+
+    /* Create program shader */
+    unsigned int iShader = CreateShader(vertexShaderSource, fragmentShaderSource);
+    glUseProgram(iShader);
 
     /* Loop until the user closes the window */
     while (!glfwWindowShouldClose(window))
     {
-        /* Render here */
+        /* Set position of view */
+        glViewport(x, y, 200, 200);
+
+        /* Handle user input */
+        handle_input(&x, &y);
+
+        // Clear color buffer
+        glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT);
 
-        glDrawArrays(GL_TRIANGLES, 0, 3);
+        // Bind VAO
+        glBindVertexArray(VAO);
+
+        // Draw the triangle
+        glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+
+        // Unbind VAO
+        glBindVertexArray(0);
 
         /* Swap front and back buffers */
         glfwSwapBuffers(window);

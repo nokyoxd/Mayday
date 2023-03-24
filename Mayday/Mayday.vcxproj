@@ -146,6 +146,7 @@
   <ItemGroup>
     <ClInclude Include="src\graphics\shaders.h" />
     <ClInclude Include="src\include.hpp" />
+    <ClInclude Include="src\input\input.h" />
     <ClInclude Include="src\utilities\utilities.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
