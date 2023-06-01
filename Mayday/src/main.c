@@ -1,9 +1,23 @@
 #include "include.hpp"
 #include "graphics/shaders.h"
 #include "input/input.h"
+#include "graphics/renderer.h"
 
-static int x = 10;
-static int y = 10;
+// Callback function for handling GLFW errors
+void errorCallback(int error, const char* description) {
+    fprintf(stderr, "GLFW Error: %s\n", description);
+}
+
+//void framebufferSizeCallback(GLFWwindow* window, int width, int height) {
+//    // Set the desired aspect ratio (e.g., 16:9)
+//    float desiredAspectRatio = 9.0f / 16.0f;
+//
+//    // Calculate the height based on the desired aspect ratio
+//    int newHeight = width / desiredAspectRatio;
+//
+//    // Set the new size of the window
+//    glfwSetWindowSize(window, width, newHeight);
+//}
 
 int main(void)
 {
@@ -14,12 +28,18 @@ int main(void)
         return -1;
 
     /* Create a window and OpenGL context */
-    window = glfwCreateWindow(1240, 820, "Mayday", NULL, NULL);
+    window = glfwCreateWindow(640, 840, "Mayday", NULL, NULL);
     if (!window)
     {
         glfwTerminate();
         return -1;
     }
+
+    // Set the framebuffer size callback function
+    /*glfwSetFramebufferSizeCallback(window, framebufferSizeCallback);*/
+
+    // Disable window resizing
+    glfwSetWindowAttrib(window, GLFW_RESIZABLE, GL_FALSE);
 
     /* Make the window's context current */
     glfwMakeContextCurrent(window);
@@ -31,74 +51,43 @@ int main(void)
     printf("Status: Initialized GLFW (%s)\n", glfwGetVersionString());
     printf("Status: Initialized GLEW (%s)\n", glGetString(GL_VERSION));
 
-    /* Position of the element points */
-    float vertices[] = {
-        0.5f, 0.5f, 0.0f,       // top right
-        0.5f, -0.5f, 0.0f,      // bottom right
-        -0.5f, -0.5f, 0.0f,     // bottom left
-        -0.5f, 0.5f, 0.0f,      // top left
-        -0.2f, 0.2f, 0.0f       // bottom left
-    };
+    /*struct FONScontext* fs = glfonsCreate(512, 512, 1);
+    int fontNormal = fonsAddFont(fs, "sans", "DroidSerif-Regular.ttf");
+    float dx = 10, dy = 10;
+    unsigned int white = glfonsRGBA(255, 255, 255, 255);*/
 
-    unsigned int indices[] = {
-        0, 1, 3,
-        1, 2, 3
-    };
-
-    unsigned int VBO, VAO, EBO;
-    glGenBuffers(1, &VBO);
-    glGenVertexArrays(1, &VAO);
-    glGenBuffers(1, &EBO);
-
-    glBindVertexArray(VAO);
-
-    glBindBuffer(GL_ARRAY_BUFFER, VBO);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
-
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
-
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
-    glEnableVertexAttribArray(0);
-
-    glBindVertexArray(0);
-    glBindBuffer(GL_ARRAY_BUFFER, 0);
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
-
-    /* Create program shader */
-    unsigned int iShader = CreateShader(vertexShaderSource, fragmentShaderSource);
-    glUseProgram(iShader);
+    entity_t* ship = entity_new();
 
     /* Loop until the user closes the window */
     while (!glfwWindowShouldClose(window))
     {
-        /* Set position of view */
-        glViewport(x, y, 200, 200);
-
-        /* Handle user input */
-        handle_input(&x, &y);
-
-        // Clear color buffer
-        glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
+        // Clear the screen
+        glClearColor(0.0784f, 0.0784f, 0.0784f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT);
 
-        // Bind VAO
-        glBindVertexArray(VAO);
+        /*fonsSetFont(fs, fontNormal);
+        fonsSetSize(fs, 124.0f);
+        fonsSetColor(fs, white);
+        fonsDrawText(fs, dx, dy, "The big ", NULL);*/
 
-        // Draw the triangle
-        glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+        // Handle player input
+        handle_input(ship);
 
-        // Unbind VAO
-        glBindVertexArray(0);
+        // Ship position
+        vec2_t pos = (*ship).pos;
 
-        /* Swap front and back buffers */
+        // Render rectangles
+        renderTriangle(pos, 0.08f, color_new(1.f, 1.f, 1.f, 0.5f));
+
+        // Swap buffers and poll events
         glfwSwapBuffers(window);
-
-        /* Poll for and process events */
         glfwPollEvents();
+
+        Sleep(10);
     }
 
-    /* Terminate GLFW content */
+    // Clean up resources
+    free(ship);
     glfwTerminate();
 
     return 0;
