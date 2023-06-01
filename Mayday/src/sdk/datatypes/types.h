@@ -1,4 +1,5 @@
 #pragma once
+#include "../../utilities/utilities.h"
 
 #define new(type) ((type*)malloc(sizeof(type)))
 
@@ -35,6 +36,8 @@ typedef struct {
 
 entity_t* entity_new() {
     entity_t* ent = new(entity_t);
+    assert(ent != NULL, "Invalid entity pointer");
+
     ent->pos = vec2_new(0.f, -0.75f);
     ent->health = 100;
 

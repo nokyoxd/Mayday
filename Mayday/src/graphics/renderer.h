@@ -4,7 +4,7 @@
 #include "../sdk/datatypes/types.h"
 #include "utilities/utilities.h"
 
-void renderTriangle(vec2_t pos, float size, color_t clr)
+void render_triangle(vec2_t pos, float size, color_t clr)
 {
     // Set the color
     glColor4f(clr.r, clr.g, clr.b, clr.a);
@@ -26,7 +26,7 @@ void renderTriangle(vec2_t pos, float size, color_t clr)
     glEnd();
 }
 
-void renderRect(vec2_t pos, vec2_t size, color_t color) {
+void render_rect(vec2_t pos, vec2_t size, color_t color) {
     // Set the color for rendering
     glColor4f(color.r, color.g, color.b, color.a);
 
@@ -37,18 +37,4 @@ void renderRect(vec2_t pos, vec2_t size, color_t color) {
     glVertex2f(pos.x + size.x, pos.y + size.y);
     glVertex2f(pos.x, pos.y + size.y);
     glEnd();
-}
-
-void renderMeteor() {
-    vec2_t pos;
-    pos.x = random_float(-1.f, 1.f);
-    pos.y = random_float(-1.f, 1.f);
-
-    vec2_t size;
-    size.x = random_float(0.1f, 1.f);
-    size.y = random_float(0.1f, 1.f);
-
-    color_t clr = color_new(1.f, 0.f, 0.f, 0.1f);
-
-    renderRect(pos, size, clr);
 }
