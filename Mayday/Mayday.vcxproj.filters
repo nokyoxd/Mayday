@@ -29,7 +29,16 @@
     <ClInclude Include="src\include.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\input\input.h">
+    <ClInclude Include="src\input\input_handler.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\graphics\renderer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\datatypes\types.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\globals.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

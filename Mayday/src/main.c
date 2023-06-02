@@ -1,105 +1,120 @@
 #include "include.hpp"
 #include "graphics/shaders.h"
-#include "input/input.h"
+#include "input/input_handler.h"
+#include "graphics/renderer.h"
 
-static int x = 10;
-static int y = 10;
+int width = 640;
+int height = 840;
 
-int main(void)
-{
-    GLFWwindow* window;
+GLFWwindow* window;
+entity_t* ship;
 
+globals_t _G = {
+    .m_iState = 0,
+};
+
+// Callback function for handling GLFW errors
+void errorCallback(int error, const char* description) {
+    fprintf(stderr, "GLFW Error: %s\n", description);
+}
+
+int init_glfw(void) {
     /* Initialize GLFW library */
     if (!glfwInit())
         return -1;
 
     /* Create a window and OpenGL context */
-    window = glfwCreateWindow(1240, 820, "Mayday", NULL, NULL);
+    window = glfwCreateWindow(width, height, "Mayday", NULL, NULL);
     if (!window)
     {
         glfwTerminate();
         return -1;
     }
 
+    // Disable window resizing
+    glfwSetWindowAttrib(window, GLFW_RESIZABLE, GL_FALSE);
+
     /* Make the window's context current */
     glfwMakeContextCurrent(window);
 
+    return 0;
+}
+
+int init_glew(void) {
     /* Initialize GLEW library */
     if (glewInit() != GLEW_OK)
         return -1;
 
-    printf("Status: Initialized GLFW (%s)\n", glfwGetVersionString());
-    printf("Status: Initialized GLEW (%s)\n", glGetString(GL_VERSION));
+    // Set the viewport dimensions
+    glfwGetFramebufferSize(window, &width, &height);
+    glViewport(0, 0, width, height);
 
-    /* Position of the element points */
-    float vertices[] = {
-        0.5f, 0.5f, 0.0f,       // top right
-        0.5f, -0.5f, 0.0f,      // bottom right
-        -0.5f, -0.5f, 0.0f,     // bottom left
-        -0.5f, 0.5f, 0.0f,      // top left
-        -0.2f, 0.2f, 0.0f       // bottom left
-    };
+    return 0;
+}
 
-    unsigned int indices[] = {
-        0, 1, 3,
-        1, 2, 3
-    };
+int render(void) {
 
-    unsigned int VBO, VAO, EBO;
-    glGenBuffers(1, &VBO);
-    glGenVertexArrays(1, &VAO);
-    glGenBuffers(1, &EBO);
+    // Inside the rendering loop
+    glMatrixMode(GL_PROJECTION);
+    glLoadIdentity();
+    glOrtho(0, width, 0, height, -1, 1);
+    glMatrixMode(GL_MODELVIEW);
+    glLoadIdentity();
 
-    glBindVertexArray(VAO);
+    // Clear the screen
+    glClearColor(0.0784f, 0.0784f, 0.0784f, 1.0f);
+    glClear(GL_COLOR_BUFFER_BIT);
 
-    glBindBuffer(GL_ARRAY_BUFFER, VBO);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+    switch (_G.m_iState)
+    {
+    case 0:
+    {
 
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
+        break;
+    }
+    case 1:
+    {
+        // Handle player input
+        handle_movement(ship);
 
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
-    glEnableVertexAttribArray(0);
+        // Render ship triangle
+        render_triangle(ship->pos, 25.f, color_new(1.f, 1.f, 1.f, 0.5f));
+        break;
+    }
+    case 2:
+    {
+        break;
+    }
+    }
 
-    glBindVertexArray(0);
-    glBindBuffer(GL_ARRAY_BUFFER, 0);
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+    // Swap buffers and poll events
+    glfwSwapBuffers(window);
+    glfwPollEvents();
+}
 
-    /* Create program shader */
-    unsigned int iShader = CreateShader(vertexShaderSource, fragmentShaderSource);
-    glUseProgram(iShader);
+int clean_up(void) {
+    // Clean up resources
+    free(ship);
+    glfwTerminate();
+}
+
+int main(void) {
+    assert_fn(init_glfw, 0);
+    assert_fn(init_glew, 0);
+
+    ship = entity_new(vec2_new(width, height));
 
     /* Loop until the user closes the window */
     while (!glfwWindowShouldClose(window))
     {
-        /* Set position of view */
-        glViewport(x, y, 200, 200);
+        handle_input(&_G);
 
-        /* Handle user input */
-        handle_input(&x, &y);
+        render();
 
-        // Clear color buffer
-        glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
-        glClear(GL_COLOR_BUFFER_BIT);
-
-        // Bind VAO
-        glBindVertexArray(VAO);
-
-        // Draw the triangle
-        glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
-
-        // Unbind VAO
-        glBindVertexArray(0);
-
-        /* Swap front and back buffers */
-        glfwSwapBuffers(window);
-
-        /* Poll for and process events */
-        glfwPollEvents();
+        Sleep(10);
     }
 
-    /* Terminate GLFW content */
-    glfwTerminate();
+    clean_up();
 
     return 0;
 }
