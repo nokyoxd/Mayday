@@ -118,6 +118,14 @@ int render(void) {
         // Handle player input
         handle_movement(ship);
 
+        render_meteorite(vec2_new(100.f, 100.f), 25.f, color_new(1.f, 0.f, 0.f, 0.f));
+
+        render_rect(vec2_new(_G.m_iWidth - 205, _G.m_iHeight - 30), vec2_new(_G.m_iWidth - 15, _G.m_iHeight - 10), color_new(1.f, 1.f, 1.f, 1.f));
+        int parts = ship->health / 20;
+
+        for (int i = 0; i < parts; ++i)
+            render_rect(vec2_new(_G.m_iWidth - 52 - (37 * i), _G.m_iHeight - 28), vec2_new(_G.m_iWidth - 20 - (37 * i), _G.m_iHeight - 12), color_new(1.f, 0.f, 0.f, 0.f));
+
         // Render ship triangle
         render_triangle(ship->pos, 25.f, color_new(1.f, 1.f, 1.f, 0.5f), 0.f);
 
@@ -125,6 +133,9 @@ int render(void) {
     }
     case 4: // Pause stage
     {
+        color_t clr = color_new(0.2f, 0.2f, 0.2f, 0.5f);
+        render_rect(vec2_new(s, s), vec2_new(_G.m_iWidth - s, _G.m_iHeight - s), clr);
+
         break;
     }
     default: // Invalid stage
@@ -149,7 +160,7 @@ int main(void) {
     assert_fn(init_glfw, 0);
     assert_fn(init_glew, 0);
 
-    ship = entity_new();
+    ship = entity_new(vec2_new(_G.m_iWidth, _G.m_iHeight));
 
     srand(time(NULL));
 

@@ -42,11 +42,11 @@ typedef struct {
     int health;
 } entity_t;
 
-entity_t* entity_new() {
+entity_t* entity_new(vec2_t size) {
     entity_t* ent = new(entity_t);
-    assert(ent != NULL, "Invalid entity pointer");
+    assert(ent != NULL, "Invalid entity pointer!");
 
-    ent->pos = vec2_new(_G.m_iWidth / 2, _G.m_iHeight / 5);
+    ent->pos = vec2_new(size.x / 4, size.y / 8);
     ent->health = 100;
 
     return ent;

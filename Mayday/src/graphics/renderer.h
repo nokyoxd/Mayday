@@ -7,7 +7,7 @@
 void render_triangle(vec2_t pos, float size, color_t clr, float rotation)
 {
     // Set the color
-    glColor4f(clr.r, clr.g, clr.b, clr.a);
+    glColor3f(clr.r, clr.g, clr.b);
 
     // Calculate vertex positions based on the input parameters
     float halfSize = size / 2.0f;
@@ -38,10 +38,9 @@ void render_triangle(vec2_t pos, float size, color_t clr, float rotation)
     glPopMatrix();
 }
 
-
-void render_rect(vec2_t pos_start, vec2_t size_end, color_t color) {
+void render_rect(vec2_t pos_start, vec2_t size_end, color_t clr) {
     // Set the color for rendering
-    glColor4f(color.r, color.g, color.b, color.a);
+    glColor3f(clr.r, clr.g, clr.b);
 
     // Render the rectangle using OpenGL immediate mode
     glBegin(GL_QUADS);
@@ -49,6 +48,56 @@ void render_rect(vec2_t pos_start, vec2_t size_end, color_t color) {
     glVertex2f(size_end.x, pos_start.y);
     glVertex2f(size_end.x, size_end.y);
     glVertex2f(pos_start.x, size_end.y);
+    glEnd();
+}
+
+void render_meteorite(vec2_t pos, float size, color_t clr) {
+    // Set the color of the meteorite
+    glColor3f(clr.r, clr.g, clr.b);
+
+    // Generate random sizes for each axis
+    float sizeX = size * (0.5 + rand() / (float)RAND_MAX);  // Random size on X-axis
+    float sizeY = size * (0.5 + rand() / (float)RAND_MAX);  // Random size on Y-axis
+    float sizeZ = size * (0.5 + rand() / (float)RAND_MAX);  // Random size on Z-axis
+
+    // Render the meteorite as a 6-axis rectangle
+    glBegin(GL_QUADS);
+    // Front face
+    glVertex3f(pos.x - sizeX, pos.y - sizeY, 0);
+    glVertex3f(pos.x + sizeX, pos.y - sizeY, 0);
+    glVertex3f(pos.x + sizeX, pos.y + sizeY, 0);
+    glVertex3f(pos.x - sizeX, pos.y + sizeY, 0);
+
+    // Back face
+    glVertex3f(pos.x - sizeX, pos.y - sizeY, -sizeZ);
+    glVertex3f(pos.x + sizeX, pos.y - sizeY, -sizeZ);
+    glVertex3f(pos.x + sizeX, pos.y + sizeY, -sizeZ);
+    glVertex3f(pos.x - sizeX, pos.y + sizeY, -sizeZ);
+
+    // Top face
+    glVertex3f(pos.x - sizeX, pos.y + sizeY, 0);
+    glVertex3f(pos.x + sizeX, pos.y + sizeY, 0);
+    glVertex3f(pos.x + sizeX, pos.y + sizeY, -sizeZ);
+    glVertex3f(pos.x - sizeX, pos.y + sizeY, -sizeZ);
+
+    // Bottom face
+    glVertex3f(pos.x - sizeX, pos.y - sizeY, 0);
+    glVertex3f(pos.x + sizeX, pos.y - sizeY, 0);
+    glVertex3f(pos.x + sizeX, pos.y - sizeY, -sizeZ);
+    glVertex3f(pos.x - sizeX, pos.y - sizeY, -sizeZ);
+
+    // Left face
+    glVertex3f(pos.x - sizeX, pos.y - sizeY, 0);
+    glVertex3f(pos.x - sizeX, pos.y + sizeY, 0);
+    glVertex3f(pos.x - sizeX, pos.y + sizeY, -sizeZ);
+    glVertex3f(pos.x - sizeX, pos.y - sizeY, -sizeZ);
+
+    // Right face
+    glVertex3f(pos.x + sizeX, pos.y - sizeY, 0);
+    glVertex3f(pos.x + sizeX, pos.y + sizeY, 0);
+    glVertex3f(pos.x + sizeX, pos.y + sizeY, -sizeZ);
+    glVertex3f(pos.x + sizeX, pos.y - sizeY, -sizeZ);
+
     glEnd();
 }
 
