@@ -11,8 +11,12 @@
 #include <math.h>
 
 #include "utilities/wrappers.h"
-#include "datatypes/types.h"
 #include "utilities/math.h"
+#include "utilities/utilities.h"
+
+#include "datatypes/types.h"
+#include "datatypes/data.h"
+#include "datatypes/entity.h"
 
 // Globals
 globals_t g = {

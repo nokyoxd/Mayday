@@ -16,12 +16,12 @@ void handle_movement(entity_t* ent) {
 }
 
 void handle_selection(int* choise) {
-	if (key_active(VK_UP))
+	if (key_pressed(VK_UP))
 		*choise += (*choise >= 3) ? 0 : 1;
-	else if (key_active(VK_DOWN))
+	else if (key_pressed(VK_DOWN))
 		*choise -= (*choise <= 1) ? 0 : 1;
 
-	if (key_active(VK_RETURN))
+	if (key_pressed(VK_RETURN))
 		g.stage = *choise;
 }
 
@@ -37,14 +37,14 @@ void handle_input() {
 	}
 	case stage_settings:
 	{
-		if (key_active(VK_ESCAPE))
+		if (key_pressed(VK_ESCAPE))
 			g.stage = 0;
 
 		break;
 	}
 	case stage_game:
 	{
-		if (key_active(VK_ESCAPE))
+		if (key_pressed(VK_ESCAPE))
 			g.stage = (g.stage == 3) ? 4 : 3;
 
 		handle_movement(ship);
@@ -53,7 +53,7 @@ void handle_input() {
 	}
 	case stage_pause:
 	{
-		if (key_active(VK_ESCAPE))
+		if (key_pressed(VK_ESCAPE))
 			g.stage = (g.stage == 3) ? 4 : 3;
 
 		break;

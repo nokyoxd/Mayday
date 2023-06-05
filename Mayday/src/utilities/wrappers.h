@@ -6,3 +6,7 @@
 int key_active(int keyCode) {
 	return (GetAsyncKeyState(keyCode) & 0x8000) != 0;
 }
+
+int key_pressed(int keyCode) {
+	return (GetAsyncKeyState(keyCode) & 0x01);
+}

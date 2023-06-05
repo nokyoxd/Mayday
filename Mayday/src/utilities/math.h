@@ -1,7 +1,7 @@
 #pragma once
 
 #include <math.h>
-#include "../datatypes/types.h"
+#include "../datatypes/data.h"
 
 #define M_PI 3.14159265358979323846
 

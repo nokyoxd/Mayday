@@ -1,6 +1,7 @@
 #pragma once
 #include <stdlib.h>
 
+#define new(type) ((type*)malloc(sizeof(type)))
 #define assert(condition, message) assert_func(condition, message, __FILE__, __LINE__)
 
 #define assert_fn(func, expected) \
