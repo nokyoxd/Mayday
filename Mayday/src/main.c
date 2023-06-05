@@ -1,19 +1,10 @@
-#include "globals.h"
-#include "graphics/shaders.h"
+#include "include.hpp"
 #include "input/input_handler.h"
-#include "graphics/renderer.h"
-
-#include <time.h>
-
-GLFWwindow* window;
-entity_t* ship;
-
-vec2_t poses[40];
-float rotate[40];
+#include "graphics/render_handler.h"
 
 // Callback function for handling GLFW errors
 void errorCallback(int error, const char* description) {
-    fprintf(stderr, "GLFW Error: %s\n", description);
+    fprintf(stderr, "Error: %s\n", description);
 }
 
 int init_glfw(void) {
@@ -22,7 +13,7 @@ int init_glfw(void) {
         return -1;
 
     /* Create a window and OpenGL context */
-    window = glfwCreateWindow(_G.m_iWidth, _G.m_iHeight, "Mayday", NULL, NULL);
+    window = glfwCreateWindow(g.width, g.height, "Mayday", NULL, NULL);
     if (!window)
     {
         glfwTerminate();
@@ -44,108 +35,10 @@ int init_glew(void) {
         return -1;
 
     // Set the viewport dimensions
-    glfwGetFramebufferSize(window, &_G.m_iWidth, &_G.m_iHeight);
-    glViewport(0, 0, _G.m_iWidth, _G.m_iHeight);
+    glfwGetFramebufferSize(window, &g.width, &g.height);
+    glViewport(0, 0, g.width, g.height);
 
     return 0;
-}
-
-float t = 0.f;
-int reverse = 0;
-int choise = 3;
-float s = 180.f;
-
-int render(void) {
-
-    // Inside the rendering loop
-    glMatrixMode(GL_PROJECTION);
-    glLoadIdentity();
-    glOrtho(0, _G.m_iWidth, 0, _G.m_iHeight, -1, 1);
-    glMatrixMode(GL_MODELVIEW);
-    glLoadIdentity();
-
-    // Clear the screen
-    glClearColor(0.0784f, 0.0784f, 0.0784f, 1.0f);
-    glClear(GL_COLOR_BUFFER_BIT);
-
-    switch (_G.m_iState)
-    {
-    case 0: // Main stage
-    {
-        if (reverse == 1)
-            t -= 0.2f;
-        else
-            t += 0.2f;
-
-        for (int i = 0; i < 40; ++i)
-            render_triangle(vec2_add(poses[i], vec2_new(t, t)), 25.f, color_new(0.5f, 0.5f, 0.5f, 0.5f), rotate[i]);
-
-        if (t >= 200.f)
-            reverse = 1;
-        else if (t <= 10.f)
-            reverse = 0;
-
-        color_t clr = color_new(0.2f, 0.2f, 0.2f, 0.5f);
-        render_rect(vec2_new(s, s), vec2_new(_G.m_iWidth - s, _G.m_iHeight - s), clr);
-
-        for (int i = 1; i <= 3; ++i)
-        {
-            if (choise == i)
-                render_rect(vec2_new(s + 38, s + 8 + (i * 35)), vec2_new(s + 362, s + 32 + (i * 35)), color_new(1.0f, 0.f, 0.f, 0.f));
-
-            render_rect(vec2_new(s + 40, s + 10 + (i * 35)), vec2_new(s + 360, s + 30 + (i * 35)), color_new(0.5f, 0.5f, 0.5f, 0.f));
-        }
-
-        handle_selection(&choise);
-
-        break;
-    }
-    case 1: // Exit stage
-    {
-        exit(0);
-
-        break;
-    }
-    case 2: // Settings stage
-    {
-        color_t clr = color_new(0.2f, 0.2f, 0.2f, 0.5f);
-        render_rect(vec2_new(s, s), vec2_new(_G.m_iWidth - s, _G.m_iHeight - s), clr);
-
-        break;
-    }
-    case 3: // Game stage
-    {
-        // Handle player input
-        handle_movement(ship);
-
-        render_meteorite(vec2_new(100.f, 100.f), 25.f, color_new(1.f, 0.f, 0.f, 0.f));
-
-        render_rect(vec2_new(_G.m_iWidth - 205, _G.m_iHeight - 30), vec2_new(_G.m_iWidth - 15, _G.m_iHeight - 10), color_new(1.f, 1.f, 1.f, 1.f));
-        int parts = ship->health / 20;
-
-        for (int i = 0; i < parts; ++i)
-            render_rect(vec2_new(_G.m_iWidth - 52 - (37 * i), _G.m_iHeight - 28), vec2_new(_G.m_iWidth - 20 - (37 * i), _G.m_iHeight - 12), color_new(1.f, 0.f, 0.f, 0.f));
-
-        // Render ship triangle
-        render_triangle(ship->pos, 25.f, color_new(1.f, 1.f, 1.f, 0.5f), 0.f);
-
-        break;
-    }
-    case 4: // Pause stage
-    {
-        color_t clr = color_new(0.2f, 0.2f, 0.2f, 0.5f);
-        render_rect(vec2_new(s, s), vec2_new(_G.m_iWidth - s, _G.m_iHeight - s), clr);
-
-        break;
-    }
-    default: // Invalid stage
-        assert(0, "Invalid Input!");
-        break;
-    }
-
-    // Swap buffers and poll events
-    glfwSwapBuffers(window);
-    glfwPollEvents();
 }
 
 int clean_up(void) {
@@ -157,29 +50,52 @@ int clean_up(void) {
 }
 
 int main(void) {
+    // Setup libraries
     assert_fn(init_glfw, 0);
     assert_fn(init_glew, 0);
 
-    ship = entity_new(vec2_new(_G.m_iWidth, _G.m_iHeight));
+    // Allocate memory for entity
+    ship = entity_new(vec2_new(g.width, g.height));
 
+    // Randomize rand() function
     srand(time(NULL));
 
+    // Generate random positions and rotation
     for (int i = 0; i < 40; ++i)
     {
-        poses[i] = vec2_new(rand() % (_G.m_iWidth / 2), rand() % (_G.m_iHeight / 2));
+        poses[i] = vec2_new(random_float(1.f, g.width), random_float(1.f, g.height));
         rotate[i] = 0 - (rand() % 720);
     }
 
     /* Loop until the user closes the window */
     while (!glfwWindowShouldClose(window))
     {
+        // Handle user input
         handle_input();
 
-        render();
+        // Resolve the sizes
+        glMatrixMode(GL_PROJECTION);
+        glLoadIdentity();
+        glOrtho(0, g.width, 0, g.height, -1, 1);
+        glMatrixMode(GL_MODELVIEW);
+        glLoadIdentity();
 
+        // Clear the screen
+        glClearColor(0.0784f, 0.0784f, 0.0784f, 1.0f);
+        glClear(GL_COLOR_BUFFER_BIT);
+
+        // Handle object rendering
+        handle_render();
+
+        // Swap buffers and poll events
+        glfwSwapBuffers(window);
+        glfwPollEvents();
+
+        // Save some performance
         Sleep(10);
     }
 
+    // Clean up resources
     assert_fn(clean_up, 0);
 
     return 0;

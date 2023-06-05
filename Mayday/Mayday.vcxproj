@@ -146,13 +146,17 @@
     <ClCompile Include="src\main.c" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="src\globals.h" />
+    <ClInclude Include="src\datatypes\data.h" />
+    <ClInclude Include="src\datatypes\entity.h" />
     <ClInclude Include="src\graphics\renderer.h" />
+    <ClInclude Include="src\graphics\render_handler.h" />
     <ClInclude Include="src\graphics\shaders.h" />
     <ClInclude Include="src\include.hpp" />
     <ClInclude Include="src\input\input_handler.h" />
     <ClInclude Include="src\datatypes\types.h" />
+    <ClInclude Include="src\utilities\math.h" />
     <ClInclude Include="src\utilities\utilities.h" />
+    <ClInclude Include="src\utilities\wrappers.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

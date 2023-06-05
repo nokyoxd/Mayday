@@ -4,14 +4,27 @@
 #include <GLFW/glfw3.h>
 
 #include <stdio.h>
+#include <stdlib.h>
 #include <malloc.h>
 
-#define WIN32_LEAN_AND_MEAN
-#include <Windows.h>
+#include <time.h>
+#include <math.h>
 
-#ifndef M_PI
-#define M_PI 3.14159265358979323846
-#endif
-
+#include "utilities/wrappers.h"
 #include "datatypes/types.h"
+#include "utilities/math.h"
 
+// Globals
+globals_t g = {
+    .stage = 0,
+    .width = 768,
+    .height = 550,
+};
+
+GLFWwindow* window = NULL;
+entity_t* ship = NULL;
+
+vec2_t poses[40];
+float rotate[40];
+
+int choise = 3;
