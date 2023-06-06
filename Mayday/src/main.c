@@ -1,6 +1,7 @@
 #include "include.hpp"
 #include "input/input_handler.h"
 #include "graphics/render_handler.h"
+#include "ui/elements.h"
 
 // Callback function for handling GLFW errors
 void errorCallback(int error, const char* description) {
@@ -42,6 +43,12 @@ int init_glew(void) {
 }
 
 int clean_up(void) {
+    for (int i = 0; i < 100; i++)
+        free(bullets[i]);
+
+    for (int i = 0; i < 10; i++)
+        free(meteorites[i]);
+
     // Clean up resources
     free(ship);
     glfwTerminate();
@@ -84,6 +91,11 @@ int main(void) {
         glClearColor(0.0784f, 0.0784f, 0.0784f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT);
 
+        handle_meteorites();
+
+        // Handle bullets movement etc.
+        handle_bullets(bullets);
+
         // Handle object rendering
         handle_render();
 
@@ -96,7 +108,7 @@ int main(void) {
     }
 
     // Clean up resources
-    assert_fn(clean_up, 0);
+    clean_up();
 
     return 0;
 }

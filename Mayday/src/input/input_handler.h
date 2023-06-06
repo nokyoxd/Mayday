@@ -3,16 +3,21 @@
 
 void handle_movement(entity_t* ent) {
 	if (key_active(VK_UP))
-		ent->pos = new_pos(ent->pos, ent->rotation, 10.f);
+		ent->pos = new_pos(ent->pos, ent->rotation, 5.f);
 	
 	if (key_active(VK_DOWN))
-		ent->pos = new_pos(ent->pos, ent->rotation, -10.f);
+		ent->pos = new_pos(ent->pos, ent->rotation, -5.f);
 
 	if (key_active(VK_RIGHT))
-		ent->rotation -= 5.f;
+		ent->rotation -= 4.0f;
 
 	if (key_active(VK_LEFT))
-		ent->rotation += 5.f;
+		ent->rotation += 4.0f;
+}
+
+void handle_action(entity_t* ent) {
+	if (key_active(VK_SPACE))
+		bullet_new(ent);
 }
 
 void handle_selection(int* choise) {
@@ -47,6 +52,7 @@ void handle_input() {
 		if (key_pressed(VK_ESCAPE))
 			g.stage = (g.stage == 3) ? 4 : 3;
 
+		handle_action(ship);
 		handle_movement(ship);
 
 		break;

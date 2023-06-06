@@ -144,6 +144,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="src\main.c" />
+    <ClCompile Include="src\ui\elements.c" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\audio\audio_handler.h" />
@@ -155,6 +156,7 @@
     <ClInclude Include="src\include.hpp" />
     <ClInclude Include="src\input\input_handler.h" />
     <ClInclude Include="src\datatypes\types.h" />
+    <ClInclude Include="src\ui\elements.h" />
     <ClInclude Include="src\utilities\math.h" />
     <ClInclude Include="src\utilities\utilities.h" />
     <ClInclude Include="src\utilities\wrappers.h" />

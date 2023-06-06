@@ -49,6 +49,17 @@ void render_rect(vec2_t pos_start, vec2_t size_end, color_t clr) {
     glEnd();
 }
 
+void render_line(vec2_t start, vec2_t end, color_t clr) {
+    // Set the color for rendering
+    glColor3f(clr.r, clr.g, clr.b);
+
+    // Render the line using OpenGL immediate mode
+    glBegin(GL_LINES);
+    glVertex2f(start.x, start.y);
+    glVertex2f(end.x, end.y);
+    glEnd();
+}
+
 void render_meteorite(vec2_t pos, float size, color_t clr) {
     // Set the color of the meteorite
     glColor3f(clr.r, clr.g, clr.b);

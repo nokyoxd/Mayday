@@ -3,7 +3,7 @@
 #include "../include.hpp"
 
 // *********************************************
-// section entity data type
+// struct definitions
 // *********************************************
 
 typedef struct {
@@ -11,6 +11,19 @@ typedef struct {
     int health;
     float rotation;
 } entity_t;
+
+typedef struct {
+    vec2_t startPos;
+    vec2_t endPos;
+    float rotation;
+} bullet_t;
+
+entity_t* meteorites[10];
+bullet_t* bullets[100];
+
+// *********************************************
+// entity struct functions
+// *********************************************
 
 entity_t* entity_new(vec2_t size) {
     entity_t* ent = new(entity_t);
@@ -23,11 +36,84 @@ entity_t* entity_new(vec2_t size) {
     return ent;
 }
 
+entity_t* meteorite_new() {
+    entity_t* me = new(entity_t);
+    me->pos.x = random_float(0.f, 768);
+    me->pos.y = random_float(0.f, 550);
+    me->rotation = random_float(-360.f, 360.f);
+    me->health = 100;
+
+    for (int i = 0; i < 10; i++) {
+        if (meteorites[i] != NULL)
+            continue;
+
+        meteorites[i] = me; 
+        break;
+    }
+
+    return me;
+}
+
+void handle_meteorites() {
+    for (int i = 0; i < 10; i++) {
+        if (meteorites[i] == NULL) {
+            meteorite_new();
+            return;
+        }
+        else {
+            for (int x = 0; x < 100; x++) {
+                if (bullets[x] == NULL)
+                    continue;
+
+                vec2_t bulletPos = bullets[x]->startPos;
+                vec2_t mePos = meteorites[i]->pos;
+
+                int is_in_bounds = in_bounds(bulletPos, mePos, 25.f);
+
+                if (is_in_bounds)
+                    meteorites[i]->health -= 10.f;
+            }
+
+            if (meteorites[i]->health <= 0.f)
+                meteorites[i] = NULL;
+        }
+    }
+}
+
 // *********************************************
-// section bullet data type
+// bullet struct functions
 // *********************************************
 
-typedef struct {
-    vec2_t startPos;
-    vec2_t endPos;
-} bullet_t;
+bullet_t* bullet_new(entity_t* ship) {
+    bullet_t* bull = new(bullet_t);
+    bull->startPos = ship->pos;
+    bull->endPos = ship->pos;
+    bull->rotation = ship->rotation;
+
+    for (int i = 0; i < 100; i++) {
+        if (bullets[i] != NULL)
+            continue;
+
+        bullets[i] = bull;
+        break;
+    }
+
+    return bull;
+}
+
+void handle_bullets(bullet_t* bullets[]) {
+    for (int i = 0; i < 100; i++) {
+        bullet_t* bullet = bullets[i];
+        if (bullet == NULL)
+            continue;
+
+        bullet->startPos = new_pos(bullet->startPos, bullet->rotation, 10.f);
+        bullet->endPos = new_pos(bullet->startPos, bullet->rotation, 10.f);
+
+        if (bullet->startPos.x > 763.f || bullet->startPos.x < 5.f) 
+            bullets[i] = NULL;
+            
+        if (bullet->startPos.y > 545.f || bullet->startPos.y < 5.f) 
+            bullets[i] = NULL;
+    }
+}

@@ -53,16 +53,30 @@ int handle_render(void) {
     }
     case stage_game:
     {
-        render_meteorite(vec2_new(100.f, 100.f), 25.f, color_new(0.6f, 0.6f, 0.6f));
+        for (int i = 0; i < 100; i++)
+        {
+            if (bullets[i] == NULL)
+                continue;
+
+            render_line(bullets[i]->startPos, bullets[i]->endPos, color_new(1.f, 0.f, 0.f));
+        }
+
+        for (int i = 0; i < 100; i++)
+        {
+            if (meteorites[i] == NULL)
+                continue;
+
+            render_meteorite(meteorites[i]->pos, 25.f, color_new(0.6f, 0.6f, 0.6f));
+        }
+
+        // Render ship triangle
+        render_triangle(ship->pos, 25.f, color_new(1.f, 1.f, 1.f), ship->rotation);
 
         render_rect(vec2_new(g.width - 205, g.height - 30), vec2_new(g.width - 15, g.height - 10), color_new(0.4f, 0.4f, 0.4f));
         int parts = ship->health / 20;
 
         for (int i = 0; i < parts; ++i)
             render_rect(vec2_new(g.width - 52 - (37 * i), g.height - 28), vec2_new(g.width - 20 - (37 * i), g.height - 12), color_new(1.f, 0.f, 0.f));
-
-        // Render ship triangle
-        render_triangle(ship->pos, 25.f, color_new(1.f, 1.f, 1.f), ship->rotation);
 
         break;
     }
