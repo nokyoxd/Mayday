@@ -92,7 +92,7 @@ int main(void) {
         glfwPollEvents();
 
         // Save some performance
-        Sleep(10);
+        Sleep(5);
     }
 
     // Clean up resources
