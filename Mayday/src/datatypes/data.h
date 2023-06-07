@@ -1,14 +1,15 @@
-#pragma once
+#ifndef __DATA_H__
+#define __DATA_H__
 
 // *********************************************
-// section vec2 data type
+//               VECTOR 2D
 // *********************************************
 
 typedef struct {
     float x, y;
 } vec2_t;
 
-vec2_t vec2_new(float _x, float _y) {
+vec2_t vec2(float _x, float _y) {
     vec2_t vec;
     vec.x = _x;
     vec.y = _y;
@@ -16,23 +17,23 @@ vec2_t vec2_new(float _x, float _y) {
     return vec;
 }
 
-vec2_t vec2_add(vec2_t v1, vec2_t v2) {
+vec2_t vec2_add(vec2_t _v1, vec2_t _v2) {
     vec2_t result;
-    result.x = v1.x + v2.x;
-    result.y = v1.y + v2.y;
+    result.x = _v1.x + _v2.x;
+    result.y = _v1.y + _v2.y;
 
     return result;
 }
 
 // *********************************************
-// section vec3 data type (useless)
+//              VECTOR 3D
 // *********************************************
 
 typedef struct {
     float x, y, z;
 } vec3_t;
 
-vec3_t vec3_new(float _x, float _y, float _z) {
+vec3_t vec3(float _x, float _y, float _z) {
     vec3_t vec;
     vec.x = _x;
     vec.y = _y;
@@ -41,24 +42,24 @@ vec3_t vec3_new(float _x, float _y, float _z) {
     return vec;
 }
 
-vec3_t vec3_add(vec3_t v1, vec3_t v2) {
+vec3_t vec3_add(vec3_t _v1, vec3_t _v2) {
     vec3_t result;
-    result.x = v1.x + v2.x;
-    result.y = v1.y + v2.y;
-    result.z = v1.z + v2.z;
+    result.x = _v1.x + _v2.x;
+    result.y = _v1.y + _v2.y;
+    result.z = _v1.z + _v2.z;
 
     return result;
 }
 
 // *********************************************
-// section color data type
+//                  COLOR
 // *********************************************
 
 typedef struct {
     float r, g, b, a;
 } color_t;
 
-color_t color_new(float _r, float _g, float _b) {
+color_t color(float _r, float _g, float _b) {
     color_t clr;
     clr.r = _r;
     clr.g = _g;
@@ -69,13 +70,20 @@ color_t color_new(float _r, float _g, float _b) {
 }
 
 // *********************************************
-// section window data type
+//                  GLOBALS
 // *********************************************
 
-typedef struct {
-    const char* name;
-    vec2_t pos;
-    vec2_t size;
-    color_t clr;
-} wnd_t;
+typedef enum {
+    stage_main = 0,
+    stage_exit,
+    stage_game,
+    stage_end,
+} e_stages;
 
+typedef struct {
+    e_stages stage;
+    int width;
+    int height;
+} globals_t;
+
+#endif // __DATA_H__

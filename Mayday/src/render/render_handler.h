@@ -12,7 +12,7 @@ int handle_render(void) {
 
     switch (g.stage)
     {
-    case stage_main: 
+    case stage_main:
     {
         if (reverse == 1)
             t -= 0.2f;
@@ -20,7 +20,7 @@ int handle_render(void) {
             t += 0.2f;
 
         for (int i = 0; i < 40; ++i)
-            render_triangle(vec2_add(poses[i], vec2_new(t, t)), 25.f, color_new(0.5f, 0.5f, 0.5f), rotate[i]);
+            render_triangle(vec2_add(poses[i], vec2(t, t)), 25.f, color(0.5f, 0.5f, 0.5f), rotate[i]);
 
         if (t >= 200.f)
             reverse = 1;
@@ -28,22 +28,22 @@ int handle_render(void) {
             reverse = 0;
 
         // Main panel
-        color_t clr = color_new(0.2f, 0.2f, 0.2f);
-        render_rect(vec2_new(s, s), vec2_new(g.width - s, g.height - s), clr);
+        color_t clr = color(0.2f, 0.2f, 0.2f);
+        render_rect(vec2(s, s + 30), vec2(g.width - s, g.height - s - 20), clr);
 
         // Main text
-        render_text("mayday", vec2_new(g.width / 3 - 35, (g.height / 6) * 5), 10.f, color_new(1.f, 1.f, 1.f));
+        render_text("mayday", vec2(g.width / 3 - 40, (g.height / 6) * 5), 10.f, color(1.f, 1.f, 1.f));
 
-        char text[3][50] = { "Exit", "Settings", "Play" };
-        for (int i = 1; i <= 3; ++i)
+        char text[2][50] = { "Exit", "Play" };
+        for (int i = 1; i <= 2; ++i)
         {
             // Selected option
             if (choise == i)
-                render_rect(vec2_new(s + 38, s + 8 + (i * 35)), vec2_new(s + 362, s + 32 + (i * 35)), color_new(1.0f, 0.f, 0.f));
+                render_rect(vec2(s + 38, s + 38 + (i * 35)), vec2(s + 362, s + 62 + (i * 35)), color(1.0f, 0.f, 0.f));
 
             // Render option
-            render_rect(vec2_new(s + 40, s + 10 + (i * 35)), vec2_new(s + 360, s + 30 + (i * 35)), color_new(0.5f, 0.5f, 0.5f));
-            render_text(text[i - 1], vec2_new(s + 50, s + 25 + (i * 35)), 2.f, color_new(1.f, 1.f, 1.f));
+            render_rect(vec2(s + 40, s + 40 + (i * 35)), vec2(s + 360, s + 60 + (i * 35)), color(0.5f, 0.5f, 0.5f));
+            render_text(text[i - 1], vec2(s + 50, s + 55 + (i * 35)), 2.f, color(1.f, 1.f, 1.f));
         }
 
         break;
@@ -55,15 +55,6 @@ int handle_render(void) {
 
         break;
     }
-    case stage_settings:
-    {
-        //color_t clr = color_new(0.2f, 0.2f, 0.2f);
-        //render_rect(vec2_new(s, s), vec2_new(g.width - s, g.height - s), clr);
-
-        //wnd_t* settings = create_window("settings", vec2_new(s, s), vec2_new(408, 190), color_new(1.f, 0.f, 0.f));
-
-        break;
-    }
     case stage_game:
     {
         // Bullets
@@ -72,35 +63,37 @@ int handle_render(void) {
             if (bullets[i] == NULL)
                 continue;
 
-            render_line(bullets[i]->startPos, bullets[i]->endPos, color_new(1.f, 0.f, 0.f));
+            render_line(bullets[i]->startPos, bullets[i]->endPos, color(1.f, 0.f, 0.f));
         }
 
         // Meteorites
-        for (int i = 0; i < 100; i++)
+        for (int i = 0; i < 10; i++)
         {
             if (meteorites[i] == NULL)
                 continue;
 
-            render_meteorite(meteorites[i]->pos, 25.f, color_new(0.6f, 0.6f, 0.6f));
+            render_meteorite(meteorites[i]->pos, 25.f, color(0.6f, 0.6f, 0.6f));
         }
 
         // Ship triangle
-        render_triangle(ship->pos, 25.f, color_new(1.f, 1.f, 1.f), ship->rotation);
+        render_triangle(ship->pos, 25.f, color(1.f, 1.f, 1.f), ship->rotation);
 
         // HP background 
-        render_rect(vec2_new(g.width - 205, g.height - 30), vec2_new(g.width - 15, g.height - 10), color_new(0.4f, 0.4f, 0.4f));
+        render_rect(vec2(g.width - 205, g.height - 30), vec2(g.width - 15, g.height - 10), color(0.4f, 0.4f, 0.4f));
         int parts = ship->health / 20;
 
         // HP bars
         for (int i = 0; i < parts; ++i)
-            render_rect(vec2_new(g.width - 52 - (37 * i), g.height - 28), vec2_new(g.width - 20 - (37 * i), g.height - 12), color_new(1.f, 0.f, 0.f));
+            render_rect(vec2(g.width - 52 - (37 * i), g.height - 25), vec2(g.width - 20 - (37 * i), g.height - 15), color(1.f, 0.f, 0.f));
 
         break;
     }
-    case stage_pause:
+    case stage_end:
     {
-        color_t clr = color_new(0.2f, 0.2f, 0.2f);
-        render_rect(vec2_new(s, s), vec2_new(g.width - s, g.height - s), clr);
+        char buffer[100];
+        sprintf(buffer, "SCORE: %d", 50);
+
+        render_text(buffer, vec2(g.width / 3 - 25, (g.height / 6) * 5), 5.f, color(1.f, 1.f, 1.f));
 
         break;
     }

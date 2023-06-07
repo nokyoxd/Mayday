@@ -132,7 +132,7 @@ void render_letter(char letter, vec2_t position, float size, color_t color) {
                         position.y - row * size
                     };
 
-                    render_rect(pixelPosition, vec2_new(pixelPosition.x + size, pixelPosition.y - size), color);
+                    render_rect(pixelPosition, vec2(pixelPosition.x + size, pixelPosition.y - size), color);
                 }
             }
         }
@@ -147,7 +147,7 @@ void render_letter(char letter, vec2_t position, float size, color_t color) {
                         position.y - row * size
                     };
 
-                    render_rect(pixelPosition, vec2_new(pixelPosition.x + size, pixelPosition.y - size), color);
+                    render_rect(pixelPosition, vec2(pixelPosition.x + size, pixelPosition.y - size), color);
                 }
             }
         }
@@ -160,7 +160,7 @@ void render_text(const char* str, vec2_t position, float size, color_t color) {
 
     for (int i = 0; i < strLength; i++) {
         char letter = toupper(str[i]);
-        render_letter(letter, vec2_add(position, vec2_new(xOffset, 0.0f)), size, color);
+        render_letter(letter, vec2_add(position, vec2(xOffset, 0.0f)), size, color);
         xOffset += size * 6.0f; 
     }
 }

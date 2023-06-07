@@ -14,7 +14,6 @@
 #include "utilities/math.h"
 #include "utilities/utilities.h"
 
-#include "datatypes/types.h"
 #include "datatypes/entity.h"
 
 // Globals
@@ -30,6 +29,6 @@ entity_t* ship = NULL;
 vec2_t poses[40];
 float rotate[40];
 
-int choise = 3;
+int choise = 2;
 
 #endif // __INCLUDE_HPP__

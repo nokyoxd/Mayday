@@ -87,6 +87,7 @@
       <PreprocessorDefinitions>WIN32;GLEW_STATIC;_DEBUG;_CONSOLE;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>$(SolutionDir)Dependencies\GLFW\Include\;$(SolutionDir)Dependencies\GLEW\Include\</AdditionalIncludeDirectories>
+      <CompileAs>CompileAsC</CompileAs>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -104,6 +105,7 @@
       <PreprocessorDefinitions>WIN32;GLEW_STATIC;NDEBUG;_CONSOLE;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>$(SolutionDir)Dependencies\GLFW\Include\;$(SolutionDir)Dependencies\GLEW\Include\</AdditionalIncludeDirectories>
+      <CompileAs>CompileAsC</CompileAs>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -155,7 +157,6 @@
     <ClInclude Include="src\render\shaders.h" />
     <ClInclude Include="src\include.hpp" />
     <ClInclude Include="src\input\input_handler.h" />
-    <ClInclude Include="src\datatypes\types.h" />
     <ClInclude Include="src\utilities\math.h" />
     <ClInclude Include="src\utilities\utilities.h" />
     <ClInclude Include="src\utilities\wrappers.h" />

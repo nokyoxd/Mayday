@@ -56,12 +56,31 @@ int clean_up(void) {
 }
 
 int main(void) {
+    FILE* file;
+    int score, new_score = 0;
+
+    file = fopen("score.txt", "r");
+    if (file == NULL) {
+        file = fopen("score.txt", "w");
+        assert(file != NULL, "File creation error!");
+        fclose(file);
+    }
+
+    assert(file != NULL, "File open error!");
+
+    int sc = fscanf(file, "%d", &score);
+    assert(sc != 1, "File read error!");
+
+    printf("Loaded score: %d\n", score);
+
+    fclose(file);
+
     // Setup libraries
     assert_fn(init_glfw, 0);
     assert_fn(init_glew, 0);
 
     // Allocate memory for entity
-    ship = entity_new(vec2_new(g.width, g.height));
+    ship = entity_new(vec2(g.width, g.height));
 
     // Randomize rand() function
     srand(time(NULL));
@@ -69,7 +88,7 @@ int main(void) {
     // Generate random positions and rotation
     for (int i = 0; i < 40; ++i)
     {
-        poses[i] = vec2_new(random_float(1.f, g.width), random_float(1.f, g.height));
+        poses[i] = vec2(random_float(1.f, g.width), random_float(1.f, g.height));
         rotate[i] = 0 - (rand() % 720);
     }
 
@@ -91,10 +110,10 @@ int main(void) {
         glClear(GL_COLOR_BUFFER_BIT);
 
         // Handle meteorite render
-        handle_meteorites();
+        handle_meteorites(new_score);
 
         // Handle bullets movement etc.
-        handle_bullets(bullets);
+        handle_bullets();
 
         // Handle object rendering
         handle_render();
@@ -109,6 +128,16 @@ int main(void) {
 
     // Clean up resources
     clean_up();
+
+    if (new_score > score)
+        score = new_score;
+
+    FILE* fl = fopen("score.txt", "w");
+    assert(fl != NULL, "File open error! #2");
+
+    fprintf(fl, score);
+
+    fclose(fl);
 
     return 0;
 }

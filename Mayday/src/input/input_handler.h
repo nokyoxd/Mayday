@@ -6,16 +6,29 @@
 // Handle player movement in game
 void handle_movement(entity_t* ent) {
 	if (key_active(VK_UP))
-		ent->pos = new_pos(ent->pos, ent->rotation, 5.f);
+		ent->pos = calculate_pos(ent->pos, ent->rotation, 5.f);
 	
 	if (key_active(VK_DOWN))
-		ent->pos = new_pos(ent->pos, ent->rotation, -5.f);
+		ent->pos = calculate_pos(ent->pos, ent->rotation, -5.f);
 
 	if (key_active(VK_RIGHT))
 		ent->rotation -= 4.0f;
 
 	if (key_active(VK_LEFT))
 		ent->rotation += 4.0f;
+
+	for (int i = 0; i < 10; i++) {
+		if (meteorites[i] == NULL)
+			continue;
+
+		int is_in_bounds = in_bounds(ent->pos, meteorites[i]->pos, 25.f);
+		if (is_in_bounds)
+		{
+			ent->health -= 10.f;
+			if (ent->health <= 0.f)
+				g.stage = 3;
+		}
+	}
 }
 
 // Handle fire event etc.
@@ -27,7 +40,7 @@ void handle_action(entity_t* ent) {
 // Handle main page selection
 void handle_selection(int* choise) {
 	if (key_pressed(VK_UP))
-		*choise += (*choise >= 3) ? 0 : 1;
+		*choise += (*choise >= 2) ? 0 : 1;
 	else if (key_pressed(VK_DOWN))
 		*choise -= (*choise <= 1) ? 0 : 1;
 
@@ -46,31 +59,24 @@ void handle_input() {
 
 		break;
 	}
-	case stage_settings:
-	{
-		if (key_pressed(VK_ESCAPE))
-			g.stage = 0;
-
-		break;
-	}
 	case stage_game:
 	{
-		if (key_pressed(VK_ESCAPE))
-			g.stage = (g.stage == 3) ? 4 : 3;
-
 		handle_action(ship);
 		handle_movement(ship);
 
 		break;
 	}
-	case stage_pause:
+	case stage_end:
 	{
-		if (key_pressed(VK_ESCAPE))
-			g.stage = (g.stage == 3) ? 4 : 3;
-
 		break;
 	}
+	default: // Invalid stage
+		assert(0, "Invalid Input!");
+		break;
 	}
+
+	if (key_pressed(VK_ESCAPE))
+		g.stage = (g.stage == 0) ? 2 : 0;
 }
 
 #endif // __INPUT_HANDLER_H__
