@@ -1,4 +1,5 @@
-#pragma once
+#ifndef __ENTITY_H__
+#define __ENTITY_H__
 
 #include "../include.hpp"
 
@@ -38,6 +39,8 @@ entity_t* entity_new(vec2_t size) {
 
 entity_t* meteorite_new() {
     entity_t* me = new(entity_t);
+    assert(me != NULL, "Invalid meteorite pointer!");
+
     me->pos.x = random_float(0.f, 768);
     me->pos.y = random_float(0.f, 550);
     me->rotation = random_float(-360.f, 360.f);
@@ -86,6 +89,8 @@ void handle_meteorites() {
 
 bullet_t* bullet_new(entity_t* ship) {
     bullet_t* bull = new(bullet_t);
+    assert(bull != NULL, "Invalid bullet pointer!");
+
     bull->startPos = ship->pos;
     bull->endPos = ship->pos;
     bull->rotation = ship->rotation;
@@ -117,3 +122,5 @@ void handle_bullets(bullet_t* bullets[]) {
             bullets[i] = NULL;
     }
 }
+
+#endif // __ENTITY_H__

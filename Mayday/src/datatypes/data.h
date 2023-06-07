@@ -67,3 +67,15 @@ color_t color_new(float _r, float _g, float _b) {
 
     return clr;
 }
+
+// *********************************************
+// section window data type
+// *********************************************
+
+typedef struct {
+    const char* name;
+    vec2_t pos;
+    vec2_t size;
+    color_t clr;
+} wnd_t;
+

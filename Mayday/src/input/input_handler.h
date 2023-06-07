@@ -1,6 +1,9 @@
-#pragma once
+#ifndef __INPUT_HANDLER_H__
+#define __INPUT_HANDLER_H__
+
 #include "../include.hpp"
 
+// Handle player movement in game
 void handle_movement(entity_t* ent) {
 	if (key_active(VK_UP))
 		ent->pos = new_pos(ent->pos, ent->rotation, 5.f);
@@ -15,11 +18,13 @@ void handle_movement(entity_t* ent) {
 		ent->rotation += 4.0f;
 }
 
+// Handle fire event etc.
 void handle_action(entity_t* ent) {
 	if (key_active(VK_SPACE))
 		bullet_new(ent);
 }
 
+// Handle main page selection
 void handle_selection(int* choise) {
 	if (key_pressed(VK_UP))
 		*choise += (*choise >= 3) ? 0 : 1;
@@ -30,6 +35,7 @@ void handle_selection(int* choise) {
 		g.stage = *choise;
 }
 
+// Main handle function
 void handle_input() {
 
 	switch (g.stage)
@@ -66,3 +72,5 @@ void handle_input() {
 	}
 	}
 }
+
+#endif // __INPUT_HANDLER_H__

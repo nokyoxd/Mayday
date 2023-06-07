@@ -1,7 +1,6 @@
 #include "include.hpp"
 #include "input/input_handler.h"
-#include "graphics/render_handler.h"
-#include "ui/elements.h"
+#include "render/render_handler.h"
 
 // Callback function for handling GLFW errors
 void errorCallback(int error, const char* description) {
@@ -9,11 +8,11 @@ void errorCallback(int error, const char* description) {
 }
 
 int init_glfw(void) {
-    /* Initialize GLFW library */
+    // Initialize glfw  
     if (!glfwInit())
         return -1;
 
-    /* Create a window and OpenGL context */
+    // OpenGL context 
     window = glfwCreateWindow(g.width, g.height, "Mayday", NULL, NULL);
     if (!window)
     {
@@ -24,18 +23,18 @@ int init_glfw(void) {
     // Disable window resizing
     glfwSetWindowAttrib(window, GLFW_RESIZABLE, GL_FALSE);
 
-    /* Make the window's context current */
+    // Windows context current 
     glfwMakeContextCurrent(window);
 
     return 0;
 }
 
 int init_glew(void) {
-    /* Initialize GLEW library */
+    // Initialize glew
     if (glewInit() != GLEW_OK)
         return -1;
 
-    // Set the viewport dimensions
+    // Viewport dimensions
     glfwGetFramebufferSize(window, &g.width, &g.height);
     glViewport(0, 0, g.width, g.height);
 
@@ -74,7 +73,7 @@ int main(void) {
         rotate[i] = 0 - (rand() % 720);
     }
 
-    /* Loop until the user closes the window */
+    // Main loop
     while (!glfwWindowShouldClose(window))
     {
         // Handle user input
@@ -91,6 +90,7 @@ int main(void) {
         glClearColor(0.0784f, 0.0784f, 0.0784f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT);
 
+        // Handle meteorite render
         handle_meteorites();
 
         // Handle bullets movement etc.
@@ -104,7 +104,7 @@ int main(void) {
         glfwPollEvents();
 
         // Save some performance
-        Sleep(5);
+        Sleep(10);
     }
 
     // Clean up resources

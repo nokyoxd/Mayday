@@ -1,4 +1,6 @@
-#pragma once
+#ifndef __UTILITIES_H__
+#define __UTILITIES_H__
+
 #include <stdlib.h>
 
 #define new(type) ((type*)malloc(sizeof(type)))
@@ -26,4 +28,6 @@ void assert_func(int condition, const char* message, const char* file, int line)
 float random_float(float min, float max) {
     return min + ((float)rand() / (float)RAND_MAX) * (max - min);
 }
+
+#endif // __UTILITIES_H__
 

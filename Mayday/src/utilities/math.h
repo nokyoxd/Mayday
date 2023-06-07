@@ -1,4 +1,5 @@
-#pragma once
+#ifndef __MATH_H__
+#define __MATH_H__
 
 #include <math.h>
 #include "../datatypes/data.h"
@@ -42,3 +43,4 @@ int in_bounds(vec2_t bulletPos, vec2_t meteoritePos, float meteoriteSize) {
     return 0; 
 }
 
+#endif // __MATH_H__

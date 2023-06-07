@@ -1,4 +1,5 @@
-#pragma once
+#ifndef __INCLUDE_HPP__
+#define __INCLUDE_HPP__
 
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
@@ -8,14 +9,12 @@
 #include <malloc.h>
 
 #include <time.h>
-#include <math.h>
 
 #include "utilities/wrappers.h"
 #include "utilities/math.h"
 #include "utilities/utilities.h"
 
 #include "datatypes/types.h"
-#include "datatypes/data.h"
 #include "datatypes/entity.h"
 
 // Globals
@@ -32,3 +31,5 @@ vec2_t poses[40];
 float rotate[40];
 
 int choise = 3;
+
+#endif // __INCLUDE_HPP__

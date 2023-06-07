@@ -1,4 +1,5 @@
-#pragma once
+#ifndef __SHADERS_H__
+#define __SHADERS_H__
 
 #include "../include.hpp"
 
@@ -58,3 +59,5 @@ const char* fragmentShaderSource = "#version 330 core\n"
         "{\n"
         "   fragColor = color;\n"
     "}\n";
+
+#endif // __SHADERS_H__
