@@ -8,13 +8,13 @@ void render_triangle(vec2_t pos, float size, color_t clr, float rotation) {
     glColor3f(clr.r, clr.g, clr.b);
 
     // Vertex positions 
-    float halfSize = size / 2.0f;
-    float x1 = -halfSize;
-    float y1 = -halfSize;
-    float x2 = halfSize;
-    float y2 = -halfSize;
-    float x3 = 0.0f;
-    float y3 = halfSize;
+    const float halfSize = size / 2.0f;
+    const float x1 = -halfSize;
+    const float y1 = -halfSize;
+    const float x2 = halfSize;
+    const float y2 = -halfSize;
+    const float x3 = 0.0f;
+    const float y3 = halfSize;
 
     // Save the matrix
     glPushMatrix();
@@ -71,9 +71,9 @@ void render_meteorite(vec2_t pos, float size, color_t clr) {
     glColor3f(clr.r, clr.g, clr.b);
 
     // Random sizes
-    float sizeX = size * (0.5 + rand() / (float)RAND_MAX);  
-    float sizeY = size * (0.5 + rand() / (float)RAND_MAX);  
-    float sizeZ = size * (0.5 + rand() / (float)RAND_MAX); 
+    const float sizeX = size * (0.5 + rand() / (float)RAND_MAX);  
+    const float sizeY = size * (0.5 + rand() / (float)RAND_MAX);
+    const float sizeZ = size * (0.5 + rand() / (float)RAND_MAX);
 
     // 6-axis rectangle
     glBegin(GL_QUADS);
@@ -155,7 +155,7 @@ void render_letter(char letter, vec2_t position, float size, color_t color) {
 }
 
 void render_text(const char* str, vec2_t position, float size, color_t color) {
-    int strLength = strlen(str);
+    const int strLength = strlen(str);
     float xOffset = 0.0f;
 
     for (int i = 0; i < strLength; i++) {

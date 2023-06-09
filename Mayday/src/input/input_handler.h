@@ -17,6 +17,9 @@ void handle_movement(entity_t* ent) {
 	if (key_active(VK_LEFT))
 		ent->rotation += 4.0f;
 
+	if (key_pressed(VK_ESCAPE))
+		g.stage = 3;
+
 	for (int i = 0; i < 10; i++) {
 		if (meteorites[i] == NULL)
 			continue;
@@ -68,15 +71,15 @@ void handle_input() {
 	}
 	case stage_end:
 	{
+		if (key_pressed(VK_RETURN))
+			g.stage = 0;
+
 		break;
 	}
 	default: // Invalid stage
 		assert(0, "Invalid Input!");
 		break;
 	}
-
-	if (key_pressed(VK_ESCAPE))
-		g.stage = (g.stage == 0) ? 2 : 0;
 }
 
 #endif // __INPUT_HANDLER_H__

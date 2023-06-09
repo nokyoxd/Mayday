@@ -50,9 +50,6 @@
     <ClInclude Include="src\datatypes\entity.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\audio\audio_handler.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="src\render\pixel_data.h">
       <Filter>Header Files</Filter>
     </ClInclude>

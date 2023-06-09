@@ -148,7 +148,6 @@
     <ClCompile Include="src\main.c" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="src\audio\audio_handler.h" />
     <ClInclude Include="src\datatypes\data.h" />
     <ClInclude Include="src\datatypes\entity.h" />
     <ClInclude Include="src\render\pixel_data.h" />

@@ -69,7 +69,7 @@ int main(void) {
     assert(file != NULL, "File open error!");
 
     int sc = fscanf(file, "%d", &score);
-    assert(sc != 1, "File read error!");
+    assert(sc != NULL , "File read error!");
 
     printf("Loaded score: %d\n", score);
 
@@ -110,13 +110,13 @@ int main(void) {
         glClear(GL_COLOR_BUFFER_BIT);
 
         // Handle meteorite render
-        handle_meteorites(new_score);
+        handle_meteorites(&new_score);
 
         // Handle bullets movement etc.
         handle_bullets();
 
         // Handle object rendering
-        handle_render();
+        handle_render(new_score, score);
 
         // Swap buffers and poll events
         glfwSwapBuffers(window);
@@ -133,11 +133,12 @@ int main(void) {
         score = new_score;
 
     FILE* fl = fopen("score.txt", "w");
-    assert(fl != NULL, "File open error! #2");
+    if (fl != NULL)
+    {
+        fprintf(fl, "%d", score);
 
-    fprintf(fl, score);
-
-    fclose(fl);
+        fclose(fl);
+    }
 
     return 0;
 }

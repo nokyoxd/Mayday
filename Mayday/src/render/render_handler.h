@@ -8,12 +8,13 @@ float t = 0.f;
 int reverse = 0;
 float s = 180.f;
 
-int handle_render(void) {
+int handle_render(int score, int bestScore) {
 
     switch (g.stage)
     {
     case stage_main:
     {
+        // Background ...
         if (reverse == 1)
             t -= 0.2f;
         else
@@ -34,6 +35,12 @@ int handle_render(void) {
         // Main text
         render_text("mayday", vec2(g.width / 3 - 40, (g.height / 6) * 5), 10.f, color(1.f, 1.f, 1.f));
 
+        // Score text
+        char buffer[100];
+        sprintf(buffer, "best score %d", bestScore);
+        render_text(buffer, vec2(20.f, 20.f), 2.f, color(1.f, 1.f, 1.f));
+
+        // Selection
         char text[2][50] = { "Exit", "Play" };
         for (int i = 1; i <= 2; ++i)
         {
@@ -90,10 +97,14 @@ int handle_render(void) {
     }
     case stage_end:
     {
+        // Score text
         char buffer[100];
-        sprintf(buffer, "SCORE: %d", 50);
+        sprintf(buffer, "SCORE: %d", score);
 
+        render_text("end of the game", vec2(g.width / 3 - 120, (g.height / 6) * 5.5), 5.f, color(1.f, 1.f, 1.f));
         render_text(buffer, vec2(g.width / 3 - 25, (g.height / 6) * 5), 5.f, color(1.f, 1.f, 1.f));
+
+        render_text("press enter to continue", vec2(20.f, 20.f), 2.f, color(1.f, 1.f, 1.f));
 
         break;
     }
