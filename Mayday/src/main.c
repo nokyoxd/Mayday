@@ -57,12 +57,12 @@ int clean_up(void) {
 
 int main(void) {
     FILE* file;
-    int score, new_score = 0;
+    int score = 0, new_score = 0;
 
     file = fopen("score.txt", "r");
     if (file == NULL) {
         file = fopen("score.txt", "w");
-        assert(file != NULL, "File creation error!");
+        assert(file != NULL, "File write error!");
         fclose(file);
     }
 

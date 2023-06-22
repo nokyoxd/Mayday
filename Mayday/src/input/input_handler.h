@@ -41,14 +41,18 @@ void handle_action(entity_t* ent) {
 }
 
 // Handle main page selection
-void handle_selection(int* choise) {
+void handle_selection(int* choise, entity_t* ent) {
 	if (key_pressed(VK_UP))
 		*choise += (*choise >= 2) ? 0 : 1;
 	else if (key_pressed(VK_DOWN))
 		*choise -= (*choise <= 1) ? 0 : 1;
 
 	if (key_pressed(VK_RETURN))
+	{
 		g.stage = *choise;
+		if (*choise == 3)
+			ent->health = 100;				
+	}
 }
 
 // Main handle function
@@ -58,7 +62,7 @@ void handle_input() {
 	{
 	case stage_main:
 	{
-		handle_selection(&choise);
+		handle_selection(&choise, ship);
 
 		break;
 	}

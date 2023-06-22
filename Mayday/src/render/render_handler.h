@@ -53,6 +53,9 @@ int handle_render(int score, int bestScore) {
             render_text(text[i - 1], vec2(s + 50, s + 55 + (i * 35)), 2.f, color(1.f, 1.f, 1.f));
         }
 
+        if (score > bestScore)
+            bestScore = score;
+
         break;
     }
     case stage_exit:
