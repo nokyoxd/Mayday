@@ -3,6 +3,8 @@
 
 #include "../include.hpp"
 
+// Shaders (never used them i think)
+
 static unsigned int CompileShader(unsigned int type, const char* source)
 {
     unsigned int id = glCreateShader(type);

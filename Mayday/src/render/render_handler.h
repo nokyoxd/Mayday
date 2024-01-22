@@ -44,6 +44,8 @@ int handle_render(int score, int bestScore) {
         char text[2][50] = { "Exit", "Play" };
         for (int i = 1; i <= 2; ++i)
         {
+            // Magic numbers are cool!
+
             // Selected option
             if (choise == i)
                 render_rect(vec2(s + 38, s + 38 + (i * 35)), vec2(s + 362, s + 62 + (i * 35)), color(1.0f, 0.f, 0.f));

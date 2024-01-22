@@ -5,6 +5,8 @@
 //              PIXEL DATA
 // *********************************************
 
+// Best text render method ever
+
 const int lettersData[26][5][5] = {
     { // A
         {0, 1, 1, 1, 0},

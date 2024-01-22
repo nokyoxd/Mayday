@@ -117,6 +117,11 @@ void render_meteorite(vec2_t pos, float size, color_t clr) {
     glEnd();
 }
 
+
+// *********************************************
+//                  Text render
+// *********************************************
+
 void render_letter(char letter, vec2_t position, float size, color_t color) {
     const int letterWidth = 5; 
     const int letterHeight = 5; 

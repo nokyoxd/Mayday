@@ -79,7 +79,7 @@ int main(void) {
     assert_fn(init_glfw, 0);
     assert_fn(init_glew, 0);
 
-    // Allocate memory for entity
+    // Allocate memory for local entity
     ship = entity_new(vec2(g.width, g.height));
 
     // Randomize rand() function
@@ -129,6 +129,7 @@ int main(void) {
     // Clean up resources
     clean_up();
 
+    // Save new best score
     if (new_score > score)
         score = new_score;
 
@@ -136,7 +137,6 @@ int main(void) {
     if (fl != NULL)
     {
         fprintf(fl, "%d", score);
-
         fclose(fl);
     }
 

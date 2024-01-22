@@ -41,6 +41,7 @@ entity_t* meteorite_new() {
     entity_t* me = new(entity_t);
     assert(me != NULL, "Invalid meteorite pointer!");
 
+    // Random position and rotation
     me->pos.x = random_float(0.f, 768);
     me->pos.y = random_float(0.f, 550);
     me->rotation = random_float(-360.f, 360.f);
@@ -62,8 +63,7 @@ void handle_meteorites(int* _score) {
         if (meteorites[i] == NULL) {
             meteorite_new();
             return;
-        }
-        else {
+        } else {
             for (int x = 0; x < 100; x++) {
                 if (bullets[x] == NULL)
                     continue;
